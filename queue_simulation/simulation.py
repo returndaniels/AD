@@ -1,3 +1,8 @@
+"""
+Autor: Daniel de Sousa da Silva
+DRE: 118064962
+"""
+
 import numpy as np
 
 # Funções auxiliares para geração de tempos
