@@ -25,7 +25,7 @@ class Sistema:
         self.distrib_servico = distrib_servico
         self.num_jobs = num_jobs
         self.warmup = warmup
-        self.chegadas = []
+        self.jobs = {}
         self.tempos_no_sistema = []
 
     def gerar_tempo_servico(self, servidor):
@@ -43,34 +43,34 @@ class Sistema:
         fila_S1, fila_S2, fila_S3 = [], [], []
         tempo_atual = 0
 
-        # Gerar as chegadas do processo de Poisson
+        # Gerar os jobs do processo de Poisson
         for _ in range(self.num_jobs):
             tempo_atual += exponencial(1 / self.lambda_chegada)
-            self.chegadas.append(tempo_atual)
+            self.jobs[tempo_atual] = 0 # jobs mapeados por tempo de chegada
 
         # Inicialização de servidores
         servindo_S1 = servindo_S2 = servindo_S3 = None
         fim_servico_S1 = fim_servico_S2 = fim_servico_S3 = 0
 
         # Processar jobs
-        for chegada in self.chegadas:
+        for chegada in self.jobs.keys():
             # Atualizar estado dos servidores
-            if servindo_S1 and chegada >= fim_servico_S1:
+            if servindo_S1 and servindo_S1 <= fim_servico_S1:
                 if np.random.rand() < 0.5:
                     fila_S2.append(servindo_S1)
                 else:
                     fila_S3.append(servindo_S1)
                 servindo_S1 = None
 
-            if servindo_S2 and chegada >= fim_servico_S2:
+            if servindo_S2 and servindo_S2 <= fim_servico_S2:
                 if np.random.rand() < 0.2:
                     fila_S2.append(servindo_S2)
                 else:
-                    self.tempos_no_sistema.append(chegada - servindo_S2)
+                    self.tempos_no_sistema.append(self.jobs[servindo_S2])
                 servindo_S2 = None
 
-            if servindo_S3 and chegada >= fim_servico_S3:
-                self.tempos_no_sistema.append(chegada - servindo_S3)
+            if servindo_S3 and servindo_S3 <= fim_servico_S3:
+                self.tempos_no_sistema.append(self.jobs[servindo_S3])
                 servindo_S3 = None
 
             # Adicionar jobs às filas
@@ -79,15 +79,21 @@ class Sistema:
             # Servir jobs
             if not servindo_S1 and fila_S1:
                 servindo_S1 = fila_S1.pop(0)
-                fim_servico_S1 = chegada + self.gerar_tempo_servico(0)
+                tempo_servico = self.gerar_tempo_servico(0)
+                fim_servico_S1 = chegada + tempo_servico
+                self.jobs[chegada] = tempo_servico
 
             if not servindo_S2 and fila_S2:
                 servindo_S2 = fila_S2.pop(0)
-                fim_servico_S2 = chegada + self.gerar_tempo_servico(1)
+                tempo_servico = self.gerar_tempo_servico(1)
+                self.jobs[servindo_S2] += tempo_servico
+                fim_servico_S2 = servindo_S2 + self.jobs[servindo_S2]
 
             if not servindo_S3 and fila_S3:
                 servindo_S3 = fila_S3.pop(0)
-                fim_servico_S3 = chegada + self.gerar_tempo_servico(2)
+                tempo_servico = self.gerar_tempo_servico(2)
+                self.jobs[servindo_S3] += tempo_servico
+                fim_servico_S3 = servindo_S3 + self.jobs[servindo_S3]
 
         # Descartar warm-up
         self.tempos_no_sistema = self.tempos_no_sistema[self.warmup:]
