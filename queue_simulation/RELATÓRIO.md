@@ -33,7 +33,7 @@ Simular uma rede aberta de filas composta por três servidores (S1, S2 e S3) em 
 
 ## Resultados Observados
 
-![Gráficos de simulações](.git/plot_simulations.png)
+![Gráficos de simulações](assets/plot_simulations.png)
 
 ### Situação 1
 
