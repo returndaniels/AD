@@ -97,34 +97,3 @@ class Sistema:
         tempo_medio = np.mean(self.tempos_no_sistema)
         desvio_padrao = np.std(self.tempos_no_sistema)
         return tempo_medio, desvio_padrao
-
-# Configurações para cada situação
-
-situacoes = [
-    # Situação 1: tempos determinísticos
-    {
-        "tempos_servico": [0.4, 0.6, 0.95],
-        "distrib_servico": ["deterministico", "deterministico", "deterministico"]
-    },
-    # Situação 2: tempos uniformes
-    {
-        "tempos_servico": [(0.1, 0.7), (0.1, 1.1), (0.1, 1.8)],
-        "distrib_servico": ["uniforme", "uniforme", "uniforme"]
-    },
-    # Situação 3: tempos exponenciais
-    {
-        "tempos_servico": [0.4, 0.6, 0.95],
-        "distrib_servico": ["exponencial", "exponencial", "exponencial"]
-    }
-]
-
-# Simular e coletar métricas
-
-lambda_chegada = 2
-for i, situacao in enumerate(situacoes, 1):
-    sistema = Sistema(lambda_chegada, situacao["tempos_servico"], situacao["distrib_servico"])
-    sistema.simular()
-    tempo_medio, desvio_padrao = sistema.calcular_metricas()
-    print(f"Situação {i}:")
-    print(f"  Tempo médio no sistema: {tempo_medio:.4f}s")
-    print(f"  Desvio padrão: {desvio_padrao:.4f}s\n")
