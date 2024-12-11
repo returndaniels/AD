@@ -12,7 +12,7 @@ for situacao in situacoes:
     for _ in range(32):
         sistema = Sistema(lambda_chegada, situacao["tempos_servico"], situacao["distrib_servico"])
         sistema.simular()
-        tempo_medio, desvio_padrao = sistema.calcular_metricas()
+        tempo_medio, desvio_padrao, _, _ = sistema.calcular_metricas()
         tempos_medios.append(tempo_medio)
         desvios_padroes.append(desvio_padrao)
     resultados.append((tempos_medios, desvios_padroes))

@@ -100,6 +100,8 @@ class Sistema:
 
     def calcular_metricas(self):
         """Calcula as métricas pedidas."""
+        tempo_minimo = np.min(self.tempos_no_sistema)
+        tempo_maximo = np.max(self.tempos_no_sistema)
         tempo_medio = np.mean(self.tempos_no_sistema)
         desvio_padrao = np.std(self.tempos_no_sistema)
-        return tempo_medio, desvio_padrao
+        return tempo_medio, desvio_padrao, tempo_minimo, tempo_maximo

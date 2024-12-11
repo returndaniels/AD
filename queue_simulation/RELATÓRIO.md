@@ -28,41 +28,49 @@ Simular uma rede aberta de filas composta por três servidores (S1, S2 e S3) em 
 
 ### Parâmetros Comuns
 
-- Taxa de chegada: \(\lambda = 2\) jobs por segundo.
+- Taxa de chegada: $\lambda = 2$ jobs por segundo.
 - Cada situação foi simulada 32 vezes para garantir resultados consistentes.
 
 ## Resultados Observados
 
-![Gráficos de simulações](assets/plot_simulations.png)
-
 ### Situação 1
 
-- **Tempo médio no sistema**: 4274.3938s
-- **Desvio padrão**: 144.8786s
+- **Tempo médio no sistema**: 1.2494s
+- **Desvio padrão**: 0.2564s
+- **Tempo mínimo no sistema**: 1.0000s
+- **Tempo máximo no sistema**: 4.0000s
 
 ### Situação 2
 
-- **Tempo médio no sistema**: 4205.1300s
-- **Desvio padrão**: 121.8630s
+- **Tempo médio no sistema**: 1.2468s
+- **Desvio padrão**: 0.5113s
+- **Tempo mínimo no sistema**: 0.2151s
+- **Tempo máximo no sistema**: 5.1222s
 
 ### Situação 3
 
-- **Tempo médio no sistema**: 4284.8948s
-- **Desvio padrão**: 130.9677s
+- **Tempo médio no sistema**: 1.2359s
+- **Desvio padrão**: 0.9634s
+- **Tempo mínimo no sistema**: 0.0106s
+- **Tempo máximo no sistema**: 7.8842s
 
 ## Análise dos Resultados
 
 1. **Tempos Médios**:
 
-   - O tempo médio no sistema é ligeiramente maior nas situações 1 e 3 em comparação à situação 2. Isso sugere que a variabilidade nos tempos de serviço da situação 2 pode ajudar a suavizar o acúmulo de jobs, reduzindo o tempo médio no sistema.
+   - O tempo médio no sistema é bem próximo, independente da situação.
 
 2. **Desvio Padrão**:
-   - A situação 2 apresenta o menor desvio padrão (121.8630s), indicando que os tempos no sistema foram mais uniformes.
-   - Já na situação 1, com tempos determinísticos, o desvio padrão foi maior (144.8786s), possivelmente devido à interação fixa dos tempos de serviço com as filas.
-   - A situação 3, com tempos exponenciais, também apresentou um desvio padrão relativamente baixo (130.9677s), mas ainda superior à situação 2.
+   - A situação 1 apresenta o menor desvio padrão (0.2564s), o que é esperado pois os tempos de serviço são deterministicos .
+   - Já na situação 3, com tempos exponenciais, o desvio padrão foi maior (0.9634s), possivelmente devido à maior variabilidade dos tempos de serviço.
+   - A situação 2, com tempos uniformes, também apresentou um desvio padrão relativamente alto (0.5113s), mas ainda inferior à situação 3.
+
+## Análise Gráfica
+
+![Gráficos de simulações](assets/plot_simulations.png)
+
+Os gráficos revelam que o desvio padrão se mantém relativamente estável ao longo das 32 simulações nos três cenários avaliados. Em relação ao **tempo médio no sistema**, observa-se que a **situação 3** apresenta maior variabilidade, conforme indicado pelo gráfico do desvio padrão, enquanto a **situação 1** demonstra maior estabilidade nos resultados.
 
 ## Conclusão
 
-Os resultados mostram que a variabilidade nos tempos de serviço afeta significativamente o desempenho do sistema. A distribuição uniforme nos tempos de serviço (situação 2) foi a mais eficiente em termos de tempo médio no sistema e uniformidade dos resultados. As situações com tempos determinísticos e exponenciais apresentaram tempos médios similares, mas o desvio padrão na situação determinística foi ligeiramente mais elevado.
-
-Estes resultados são coerentes com a expectativa de que a aleatoriedade introduzida pelos tempos de serviço pode afetar positivamente a dinâmica do sistema, dependendo da configuração das filas e dos servidores.
+Esses resultados confirmam que a escolha da distribuição dos tempos de serviço deve levar em conta os objetivos do sistema: enquanto tempos determinísticos garantem maior previsibilidade, distribuições com maior variabilidade podem ser mais adaptáveis em cenários dinâmicos. A análise contribui para a compreensão do impacto da variabilidade em sistemas de filas, destacando a importância de alinhar a configuração dos servidores com os requisitos de desempenho esperados.
